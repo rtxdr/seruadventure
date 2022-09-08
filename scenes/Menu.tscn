@@ -1,0 +1,351 @@
+[gd_scene load_steps=26 format=2]
+
+[ext_resource path="res://starthide.gd" type="Script" id=1]
+[ext_resource path="res://slowerlogo.gd" type="Script" id=2]
+[ext_resource path="res://Menu.gd" type="Script" id=3]
+[ext_resource path="res://assets/engine/Menu.tres" type="Theme" id=4]
+[ext_resource path="res://assets/audio/ui/startgame.mp3" type="AudioStream" id=5]
+[ext_resource path="res://assets/engine/slower3.png" type="Texture" id=6]
+[ext_resource path="res://assets/audio/ui/startsound.mp3" type="AudioStream" id=7]
+[ext_resource path="res://assets/engine/thing.png" type="Texture" id=8]
+[ext_resource path="res://assets/audio/ui/hover.mp3" type="AudioStream" id=9]
+[ext_resource path="res://assets/audio/ui/select.mp3" type="AudioStream" id=10]
+[ext_resource path="res://assets/engine/slower1.png" type="Texture" id=11]
+[ext_resource path="res://scenes/maintheme.gd" type="Script" id=12]
+[ext_resource path="res://assets/audio/music/menu1start.mp3" type="AudioStream" id=13]
+[ext_resource path="res://assets/audio/music/menu1.mp3" type="AudioStream" id=14]
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "fadeout"
+length = 1.5
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, -80, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1.5 )
+}
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends AudioStreamPlayer
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = \"text\"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+"
+
+[sub_resource type="GDScript" id=1]
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 456, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 628, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "hoverPlay"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 456, -0.25, 0, 0.1, 50.4583, 610, -0.4, -1.58972, 0.2, -1.58972 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 628, -0.25, 0, 0.25, 0, 628, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "hoverPlay 2"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 610, -0.4, -1.58972, 0.1, -23.7874, 456, -0.4, -0.787415, 0.1, 50.4583 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 628, -0.25, 0, 0.25, 0, 628, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Sprite
+
+onready var hoverS = $\"../hover\"
+
+func _ready():
+	pass
+
+func _on_Exit_pressed():
+	get_tree().exit()
+
+func _on_Exit_mouse_entered():
+	hoverS.play()
+"
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 824, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 932, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "hoverExit"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 824, -0.25, 0, 0.1, 69.7014, 978, -0.3, 0.661377, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 932, -0.25, 0, 0.25, 0, 932, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "hoverExit 2"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 978, -0.25, 0, 0, -144.779, 824, -0.2, 16.4214, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 932, -0.25, 0, 0.25, 0, 932, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.3 )
+}
+
+[node name="Menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="OSTSTART" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+script = ExtResource( 12 )
+
+[node name="OST" type="AudioStreamPlayer" parent="OSTSTART"]
+stream = ExtResource( 14 )
+
+[node name="fadeout" type="AnimationPlayer" parent="OSTSTART/OST"]
+anims/RESET = SubResource( 4 )
+anims/fadeout = SubResource( 5 )
+
+[node name="startgame" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+
+[node name="select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+
+[node name="startsound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+script = SubResource( 3 )
+
+[node name="hover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+
+[node name="bg" type="ColorRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0.345098, 0, 0, 1 )
+
+[node name="START" type="Sprite" parent="."]
+position = Vector2( 456, 628 )
+scale = Vector2( 1.4375, 1.4375 )
+texture = ExtResource( 8 )
+script = SubResource( 1 )
+
+[node name="Start" type="Button" parent="START"]
+margin_left = -607.0
+margin_top = -48.0
+margin_right = 256.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 107.478, -388.87 )
+theme = ExtResource( 4 )
+text = "         Play"
+flat = true
+
+[node name="hover" type="AnimationPlayer" parent="START"]
+anims/RESET = SubResource( 6 )
+anims/hoverPlay = SubResource( 7 )
+"anims/hoverPlay 2" = SubResource( 8 )
+
+[node name="OPTIONS" type="Sprite" parent="."]
+position = Vector2( 648, 780 )
+scale = Vector2( 1.4375, 1.4375 )
+texture = ExtResource( 8 )
+
+[node name="Options" type="Button" parent="OPTIONS"]
+anchor_left = -0.945313
+anchor_right = 0.015625
+margin_left = -256.0
+margin_top = -48.0
+margin_right = 248.0
+margin_bottom = 48.0
+theme = ExtResource( 4 )
+disabled = true
+text = "                Options"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="EXIT" type="Sprite" parent="."]
+position = Vector2( 824, 932 )
+scale = Vector2( 1.4375, 1.4375 )
+texture = ExtResource( 8 )
+script = SubResource( 2 )
+
+[node name="Exit" type="Button" parent="EXIT"]
+anchor_left = -1.18555
+anchor_right = 0.015625
+margin_left = -256.0
+margin_top = -48.0
+margin_right = 248.0
+margin_bottom = 48.0
+theme = ExtResource( 4 )
+text = "                   Exit"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="hover" type="AnimationPlayer" parent="EXIT"]
+anims/RESET = SubResource( 9 )
+anims/hoverExit = SubResource( 10 )
+"anims/hoverExit 2" = SubResource( 11 )
+
+[node name="starthide" type="ColorRect" parent="."]
+visible = false
+margin_top = -48.0
+margin_right = 1920.0
+margin_bottom = 1096.0
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 1 )
+
+[node name="startgamefade" type="ColorRect" parent="."]
+visible = false
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="slowerlogo" type="Sprite" parent="."]
+visible = false
+position = Vector2( 960, 540 )
+scale = Vector2( 0.55, 0.55 )
+texture = ExtResource( 11 )
+script = ExtResource( 2 )
+
+[node name="slowerlogo2" type="Sprite" parent="slowerlogo"]
+texture = ExtResource( 6 )
+
+[connection signal="mouse_entered" from="START/Start" to="." method="_on_Start_mouse_entered"]
+[connection signal="mouse_exited" from="START/Start" to="." method="_on_Start_mouse_exited"]
+[connection signal="pressed" from="START/Start" to="." method="_on_Start_pressed"]
+[connection signal="mouse_entered" from="EXIT/Exit" to="." method="_on_Exit_mouse_entered"]
+[connection signal="mouse_exited" from="EXIT/Exit" to="." method="_on_Exit_mouse_exited"]
+[connection signal="pressed" from="EXIT/Exit" to="." method="_on_Exit_pressed"]

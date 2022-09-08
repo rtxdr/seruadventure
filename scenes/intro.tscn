@@ -1,0 +1,358 @@
+[gd_scene load_steps=31 format=2]
+
+[ext_resource path="res://scenes/startfadein.gd" type="Script" id=1]
+[ext_resource path="res://assets/audio/music/space.mp3" type="AudioStream" id=2]
+[ext_resource path="res://assets/scenes/space.png" type="Texture" id=3]
+[ext_resource path="res://assets/seru/serufly.png" type="Texture" id=8]
+[ext_resource path="res://scenes/seruflying.gd" type="Script" id=10]
+[ext_resource path="res://scenes/exploderipple.gd" type="Script" id=11]
+[ext_resource path="res://assets/generic/effects/explosion.png" type="Texture" id=12]
+[ext_resource path="res://assets/audio/generic/explosion.mp3" type="AudioStream" id=13]
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -20.3636, 8.72725, 80.2753, 0.0392485, -80.2753, -0.0392485, -130.182, -15.6364, 84.0884, 0.0392485, -84.0884, -0.0392485, -307.636, 4.36363, 70.0541, 9.96572, -70.0541, -9.96572, -450.182, -18.9091, 60.3636, -1.45455, -60.3636, 1.45455, -726.909, -25.8182 )
+}
+
+[sub_resource type="Animation" id=20]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=21]
+resource_name = "shake"
+length = 0.5
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 0 ), Vector2( -1.804, -4.356 ), Vector2( 3.172, 0.625 ), Vector2( -1.448, 3.14 ), Vector2( -4.707, -4.495 ), Vector2( -9.671, 4.168 ), Vector2( -3.496, -0.782 ), Vector2( -3.878, 6.615 ), Vector2( 4.546, 1.456 ), Vector2( -1.362, -4.395 ), Vector2( -4.497, 0.612 ) ]
+}
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+uniform float strength: hint_range(0.0, 0.1, 0.001) = 0.08;
+uniform vec2 center = vec2(0.5, 0.5);
+uniform float radius: hint_range(0.0, 1.0, 0.001) = 0.25;
+
+
+uniform float aberration: hint_range(0.0, 1.0, 0.001) = 0.425;
+uniform float width: hint_range(0.0, 0.1, 0.0001) = 0.04;
+uniform float feather: hint_range(0.0, 1.0, 0.001) = 0.135;
+
+void fragment() {
+	vec2 st = SCREEN_UV;
+	float aspect_ratio = SCREEN_PIXEL_SIZE.y/SCREEN_PIXEL_SIZE.x;
+	vec2 scaled_st = (st -vec2(0.0, 0.5)) / vec2(1.0, aspect_ratio) + vec2(0,0.5); 
+	vec2 dist_center = scaled_st - center;
+	float mask =  (1.0 - smoothstep(radius-feather, radius, length(dist_center))) * smoothstep(radius - width - feather, radius-width , length(dist_center));
+	vec2 offset = normalize(dist_center)*strength*mask;
+	vec2 biased_st = scaled_st - offset;
+	
+	vec2 abber_vec = offset*aberration*mask;
+	
+	vec2 final_st = st*(1.0-mask) + biased_st*mask;
+
+	vec4 red = texture(SCREEN_TEXTURE, final_st + abber_vec);
+	vec4 blue = texture(SCREEN_TEXTURE, final_st - abber_vec);
+	vec4 ori = texture(SCREEN_TEXTURE, final_st);
+	COLOR = vec4(red.r, ori.g, blue.b, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/strength = 0.1
+shader_param/center = Vector2( 0.209, 0.712 )
+shader_param/radius = 0.0
+shader_param/aberration = 0.86
+shader_param/width = 0.0588
+shader_param/feather = 0.111
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:material:shader_param/radius")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:material:shader_param/width")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0588 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../endfade:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "ripple"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:material:shader_param/radius")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0.8, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:material:shader_param/width")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0588, 0.0 ]
+}
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 12 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 12 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 12 )
+region = Rect2( 32, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 12 )
+region = Rect2( 64, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 12 )
+region = Rect2( 32, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 12 )
+region = Rect2( 64, 64, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 12 )
+region = Rect2( 0, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 12 )
+region = Rect2( 32, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 12 )
+region = Rect2( 64, 96, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=19]
+animations = [ {
+"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=22]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=23]
+resource_name = "endfadeanim"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[node name="Node2D" type="Node2D"]
+
+[node name="spacesong" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+bus = "Music"
+
+[node name="bg" type="Sprite" parent="."]
+position = Vector2( 960, 540 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 3 )
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2( 1992, 568 )
+scale = Vector2( 2.75, 2.75 )
+curve = SubResource( 2 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2( -20.3636, 8.72725 )
+rotation = -1.97819
+rotate = false
+loop = false
+lookahead = 0.001
+
+[node name="seruflying" type="Sprite" parent="Path2D/PathFollow2D"]
+position = Vector2( 7.53955, 5.27101 )
+rotation = 1.95826
+texture = ExtResource( 8 )
+script = ExtResource( 10 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Path2D/PathFollow2D/seruflying"]
+anims/RESET = SubResource( 20 )
+anims/shake = SubResource( 21 )
+
+[node name="exploderipple" type="Panel" parent="."]
+material = SubResource( 4 )
+margin_left = -1.0
+margin_top = -6.0
+margin_right = 1919.0
+margin_bottom = 1074.0
+script = ExtResource( 11 )
+
+[node name="animripple" type="AnimationPlayer" parent="exploderipple"]
+playback_speed = 0.56
+anims/RESET = SubResource( 5 )
+anims/ripple = SubResource( 6 )
+
+[node name="Node2D" type="Node2D" parent="."]
+visible = false
+position = Vector2( 445, 469 )
+rotation = -0.0199299
+scale = Vector2( 2.75, 2.75 )
+
+[node name="explodesound" type="AudioStreamPlayer" parent="Node2D"]
+stream = ExtResource( 13 )
+pitch_scale = 0.53
+
+[node name="expl1" type="AnimatedSprite" parent="Node2D"]
+frames = SubResource( 19 )
+frame = 6
+speed_scale = 4.0
+playing = true
+
+[node name="expl2" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( -19.0418, 24.7164 )
+rotation = 0.019316
+scale = Vector2( 1.36866, 1.36866 )
+frames = SubResource( 19 )
+frame = 5
+speed_scale = 4.0
+playing = true
+
+[node name="expl3" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( -25.2683, -9.59637 )
+rotation = 0.019316
+scale = Vector2( 1.69106, 1.69106 )
+frames = SubResource( 19 )
+frame = 4
+speed_scale = 4.0
+playing = true
+
+[node name="expl4" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 0.895004, 9.83797 )
+rotation = 0.019316
+scale = Vector2( 0.957957, 0.957957 )
+frames = SubResource( 19 )
+frame = 3
+speed_scale = 4.0
+playing = true
+
+[node name="expl5" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( -32.9092, 8.80045 )
+rotation = 0.019316
+scale = Vector2( 2.27926, 2.27926 )
+frames = SubResource( 19 )
+frame = 3
+speed_scale = 4.0
+playing = true
+
+[node name="expl6" type="AnimatedSprite" parent="Node2D"]
+position = Vector2( 14.7974, 5.75057 )
+rotation = 0.019316
+scale = Vector2( 1.35283, 1.35283 )
+frames = SubResource( 19 )
+frame = 2
+speed_scale = 4.0
+playing = true
+
+[node name="endfade" type="Panel" parent="."]
+modulate = Color( 0, 0, 0, 0 )
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="endfadeanim" type="AnimationPlayer" parent="endfade"]
+anims/RESET = SubResource( 22 )
+anims/endfadeanim = SubResource( 23 )
+
+[node name="startintrofade" type="ColorRect" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 1 )

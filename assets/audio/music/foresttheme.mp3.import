@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/foresttheme.mp3-3c3809b5e8e8aeaaffad3256a97f6bd5.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/music/foresttheme.mp3"
+dest_files=[ "res://.import/foresttheme.mp3-3c3809b5e8e8aeaaffad3256a97f6bd5.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

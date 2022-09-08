@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/idk.mp3-f5dfc740ef68b60c124e3ee48b4e62ef.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/ui/idk.mp3"
+dest_files=[ "res://.import/idk.mp3-f5dfc740ef68b60c124e3ee48b4e62ef.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
